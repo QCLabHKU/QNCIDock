@@ -18,7 +18,13 @@ conda env create -f ringdock_pi-cation_env.yml
 conda activate ringdock_pi-cation_env
 ```
 
-## Run
+## Run with preprocess data
+For demonstration, we provide preprocessed data (protein protanated, ligand in sdf format) for the Dockgen Dataset with all-pication interactions complexes included. This section will demonstrate how to run our docking pipeline and evaluat performance. 
+
+
+
+
+## Protanate protein and prepare for out pipele
 To run the full pipeline on a dataset like PoseBuster:
 
 Download the dataset of interest.cd to the directory containing all PDB ID dirs.RUN move.py to move the dir containing PI-CATION interaction to "with_pication" dir. 
