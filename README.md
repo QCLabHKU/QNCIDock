@@ -9,7 +9,7 @@ Our code applys to any protein pocket contains at least one postively charge ami
 
 
 
-## Installation
+## Environments
 First, clone our repo. Then, we recommend using Conda to set up the environment.
 ```bash
 conda env create -f ringdock_pi-cation_env.yml
@@ -48,6 +48,12 @@ The analysis codes include:
 
 Compute Recovery rate for π-cation interactions
 
-Structural error metrics (RMSD)
+## Citation 
+Please cite our paper if you find it helpful. Thank you!
+
+## OS
+The code has been tested on CentOS Linux Version 8.
+
+## Acknowledgement
 
 
