@@ -38,9 +38,7 @@ Run the following scripts in that directory:
 
 python pi-cation-analysis.py, which finds all pi-cation interactions and list the distance,offset,Rz of these interactions.
 python 1_sampling.py
-
 python 2_model.py
-
 
 
 
@@ -52,10 +50,6 @@ Navigate to the utils/ directory.
 We provide examples on several PDB files, and provide codes to reproduce our paper results.
 
 
-📊 Output & Evaluation
-The analysis codes include:
-
-Compute Recovery rate for π-cation interactions
 
 ## Citation 
 Please cite our paper if you find it helpful. Thank you!
@@ -63,6 +57,5 @@ Please cite our paper if you find it helpful. Thank you!
 ## OS
 The code has been tested on CentOS Linux Version 8.
 
-## Acknowledgement
 
 
