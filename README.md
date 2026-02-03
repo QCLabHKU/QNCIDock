@@ -20,7 +20,9 @@ conda activate ringdock_pi-cation_env
 
 ## Run with preprocess data 
 In this section, we demonstrate how to use our codes on a proceessed dataset (DockGen dataset with all pi-cation complexes). First, unzip the .zip file. 
-
+```bash
+unzip Dockgen_all_with_pication_protein_protanated.zip
+```
 
 For demonstration, we provide preprocessed data (protein protanated, ligand in sdf format) for the Dockgen Dataset with all-pication interactions complexes included. This section will demonstrate how to run our docking pipeline and evaluat performance. 
 
