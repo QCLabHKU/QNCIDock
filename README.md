@@ -31,12 +31,12 @@ Ensure that all required files are present before running.
 
 ## Docking on a single protein
 We first demonstrate how to dock 6HA4_T3Y from Dockgen Datset for you to try.
-### 1.Sample
+### 1. Sample
 ```bash
 python vina_sample.py
 ```
  this will generate exhaust50_dock.sdf which contains vina raw ranking of 50 sampled poses.
-### 2.Compute RMSD of each sampled pose for later evaluation only
+### 2. Compute RMSD of each sampled pose for later evaluation only
 ```bash
 python  new_creat_rmsd_csv.py
 ```
@@ -45,7 +45,7 @@ this will compute RMSD of each sampled pose compared to reference experimental l
 ```bash
 python  predict_interaction_energies.py
 ```
-### 4.Run final rerank
+### 4. Run final rerank
 ```bash
 python  run_rerank.py
 ```
