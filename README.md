@@ -57,8 +57,7 @@ For demonstration, we provide preprocessed data (protein protanated, ligand in s
 ```bash
 unzip Dockgen_all_with_pication_protein_protanated.zip
 ```
-
-For demonstration, we provide preprocessed data (protein protanated, ligand in sdf format) for the Dockgen Dataset with all-pication interactions complexes included. This section will demonstrate how to run our docking pipeline and evaluat performance. 
+As in the sinlge protein docking example, run the 4 python script in order. Then run the evaluate_RMSD.py and evlaute_pi_cation_interaction_recovery rate.py
 
 
 
