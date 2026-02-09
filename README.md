@@ -34,7 +34,7 @@ We first demonstrate how to dock 6HA4_T3Y from Dockgen Datset.
 
 
 
-## Run with preprocess data 
+## Run with preprocess dataset (Reproduce paper key results) 
 For demonstration, we provide preprocessed data (protein protanated, ligand in sdf format) for the Dockgen Dataset with all-pication interactions complexes included. This section will demonstrate how to run our docking pipeline and evaluat performance.  First, unzip the .zip file. 
 ```bash
 unzip Dockgen_all_with_pication_protein_protanated.zip
