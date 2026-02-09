@@ -10,7 +10,7 @@ To use our method to perfrom docking, you need to prepare protanated protein in 
 ## Environments
 First, clone our repo. Then, we recommend using Conda to set up the environment.
 ```bash
-conda env create -f ringdock_pi-cation_env.yml
+conda env create -f ringdock.yml
 ```
 ```bash
 conda activate ringdock_pi-cation_env
