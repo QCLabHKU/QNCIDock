@@ -45,7 +45,7 @@ this will compute RMSD of each sampled pose compared to reference experimental l
 ```bash
 python  predict_interaction_energies.py
 ```
-###4.Run final rerank
+### 4.Run final rerank
 ```bash
 python  run_rerank.py
 ```
