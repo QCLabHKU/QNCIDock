@@ -63,7 +63,7 @@ As in the sinlge protein docking example, run the 4 python script in order. Then
 
 
 ## Protanate protein and prepare for out pipele
-To run the full pipeline on a dataset like PoseBuster:
+To run the full pipeline on a unprocessed dataset like PoseBuster raw dataset:
 
 Download the dataset of interest.cd to the directory containing all PDB ID dirs.RUN move.py to move the dir containing PI-CATION interaction to "with_pication" dir. 
 cd to "with_pication" dir
