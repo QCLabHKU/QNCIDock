@@ -30,8 +30,11 @@ Ensure that all required files are present before running.
 
 
 ## Docking on a single protein
-We first demonstrate how to dock 6HA4_T3Y from Dockgen Datset. 
-
+We first demonstrate how to dock 6HA4_T3Y from Dockgen Datset for you to try.
+First, run vina_sample.py, this will generate exhaust50_dock.sdf which contains vina raw ranking of 50 sampled poses.
+Secondly,run new_creat_rmsd_csv.py, this will compute RMSD of each sampled pose compared to reference experimental ligand pose and save results containing vina score into a csv. Reference ligand pose information only used to evluation of model performance, not used as model input.
+Thirdly, run predict_interaction_energies.py, this will predict the dimer interaction energies of detected pi-cation interactions of all sampled poses.
+Finally, run run_rerank.py, this ouput final model ranking in `predictions_with_model_scores.csv`
 
 
 ## Run with preprocess dataset (Reproduce paper key results, will take some time for Vina sampling run.) 
