@@ -36,17 +36,17 @@ We first demonstrate how to dock 6HA4_T3Y from Dockgen Datset for you to try.
 python vina_sample.py
 ```
  this will generate exhaust50_dock.sdf which contains vina raw ranking of 50 sampled poses.
- ### Compute RMSD of each sampled pose for later evaluation only
+### 2.Compute RMSD of each sampled pose for later evaluation only
 ```bash
 python  new_creat_rmsd_csv.py
 ```
 this will compute RMSD of each sampled pose compared to reference experimental ligand pose and save results containing vina score into a csv. Reference ligand pose information only used to evluation of model performance, not used as model input.
-### Prediction dimer interaction energies.
+### 3. Prediction dimer interaction energies.
 ```bash
 python  predict_interaction_energies.py
 ```
-###Run final rerank
-````bash
+###4.Run final rerank
+```bash
 python  run_rerank.py
 ```
  this ouput final model ranking in `predictions_with_model_scores.csv`
