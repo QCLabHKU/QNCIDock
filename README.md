@@ -49,7 +49,7 @@ python  predict_interaction_energies.py
 ```bash
 python  run_rerank.py
 ```
- this ouput final model ranking in `predictions_with_model_scores.csv`
+ the key ouput final model ranking in `predictions_with_model_scores.csv`
 
 
 ## Run with preprocess dataset (Reproduce paper key results, will take some time for Vina sampling run.) 
