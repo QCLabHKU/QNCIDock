@@ -1,10 +1,8 @@
-PicationDock
+## Overview
 A method trained on DLPNO-CCSD(T) dimer interaction energies for quantitively evaluate pication interaction strength and guide docking aromatic ligand into  cationic protein binding pocket. 
 To use our method to perfrom docking, you need to prepare protanated protein in pbd format and ligand intial position in sdf format. 
 
-
-🧬 Pi-cation-Dock 
-Our code applys to any protein pocket contains at least one postively charge amino acid. This repository provides source code for our RingDock pipepline, focusing on pi-cation interactions (cations from protein interacts with ligand aromatic rings). Other non-colvaent interactions developing...
+Other non-colvaent interactions developing...
 
 ## Framework overview
 ![Workflow Illustration](workflow_illustration.png)
