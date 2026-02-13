@@ -22,8 +22,43 @@ import warnings
 from functools import partial
 
 # ==================== USED MODEL PATHS ====================
-STANDARD_MODEL_PATH = Path(__file__).parent / "trained_models" / "non-ARG_energy_prediction_model.pkl"   
-ARG_MODEL_PATH = Path(__file__).parent / "trained_models" / "ARG_pi_interaction_energy_predictor.pkl"         
+def get_model_paths():
+    """Dynamically locate model files based on current working directory"""
+    current_dir = Path.cwd()
+    
+    # Possible locations for trained_models directory
+    possible_locations = [
+        current_dir.parent / "trained_models",  # If running from Example_6HA4_T3Y subdirectory
+        current_dir / "trained_models",         # If running from main directory
+        Path(__file__).parent / "trained_models",  # Relative to script location
+    ]
+    
+    # Find the first location that exists
+    for location in possible_locations:
+        if location.exists() and location.is_dir():
+            standard_model = location / "non-ARG_energy_prediction_model.pkl"
+            arg_model = location / "ARG_pi_interaction_energy_predictor.pkl"
+            
+            if standard_model.exists() and arg_model.exists():
+                logger.info(f"✅ Found trained_models directory at: {location}")
+                return standard_model, arg_model
+    
+    # If not found, use default paths but warn user
+    logger.warning("⚠️  Could not automatically locate trained_models directory")
+    logger.warning(f"Current working directory: {current_dir}")
+    logger.warning("Please ensure model files exist at one of these locations:")
+    for location in possible_locations:
+        logger.warning(f"  - {location}")
+    
+    # Return default paths (will fail gracefully later with proper error messages)
+    default_location = current_dir.parent / "trained_models"
+    return (
+        default_location / "non-ARG_energy_prediction_model.pkl",
+        default_location / "ARG_pi_interaction_energy_predictor.pkl"
+    )
+
+# Initialize model paths
+STANDARD_MODEL_PATH, ARG_MODEL_PATH = get_model_paths()
 # =====================================================================
 
 # Filter warnings
@@ -360,33 +395,51 @@ def run_model_prediction(temp_csv):
     df = pd.read_csv(temp_csv)
     logger.info(f"📊 Loaded {len(df)} interactions")
 
-    # Verify models exist
-    if not os.path.exists(ARG_MODEL_PATH):
-        logger.error(f"❌ ARG model not found: {ARG_MODEL_PATH}")
-        sys.exit(1)
-    if not os.path.exists(STANDARD_MODEL_PATH):
+    # Verify models exist with better error reporting
+    if not STANDARD_MODEL_PATH.exists():
         logger.error(f"❌ Standard model not found: {STANDARD_MODEL_PATH}")
+        logger.error("Please ensure the trained_models directory is accessible from your current location:")
+        logger.error(f"Current working directory: {Path.cwd()}")
+        logger.error(f"Expected model location: {STANDARD_MODEL_PATH}")
         sys.exit(1)
+    
+    if not ARG_MODEL_PATH.exists():
+        logger.error(f"❌ ARG model not found: {ARG_MODEL_PATH}")
+        logger.error("Please ensure the trained_models directory is accessible from your current location:")
+        logger.error(f"Current working directory: {Path.cwd()}")
+        logger.error(f"Expected model location: {ARG_MODEL_PATH}")
+        sys.exit(1)
+
+    logger.info(f"✅ Using Standard model: {STANDARD_MODEL_PATH}")
+    logger.info(f"✅ Using ARG model: {ARG_MODEL_PATH}")
 
     all_preds = []
 
     # --- Load ARG model ---
-    model_data_arg = joblib.load(ARG_MODEL_PATH)
-    if isinstance(model_data_arg, dict):
-        model_arg = model_data_arg['model']
-        logger.info(f"✅ Loaded ARG model (from dict) from: {ARG_MODEL_PATH}")
-    else:
-        model_arg = model_data_arg  # fallback if saved as raw model
-        logger.info(f"✅ Loaded ARG model (raw) from: {ARG_MODEL_PATH}")
+    try:
+        model_data_arg = joblib.load(ARG_MODEL_PATH)
+        if isinstance(model_data_arg, dict):
+            model_arg = model_data_arg['model']
+            logger.info(f"✅ Loaded ARG model (from dict) from: {ARG_MODEL_PATH}")
+        else:
+            model_arg = model_data_arg  # fallback if saved as raw model
+            logger.info(f"✅ Loaded ARG model (raw) from: {ARG_MODEL_PATH}")
+    except Exception as e:
+        logger.error(f"❌ Failed to load ARG model: {e}")
+        sys.exit(1)
 
     # --- Load Standard model ---
-    model_data_std = joblib.load(STANDARD_MODEL_PATH)
-    if isinstance(model_data_std, dict):
-        model_std = model_data_std['model']
-        logger.info(f"✅ Loaded Standard model (from dict) from: {STANDARD_MODEL_PATH}")
-    else:
-        model_std = model_data_std
-        logger.info(f"✅ Loaded Standard model (raw) from: {STANDARD_MODEL_PATH}")
+    try:
+        model_data_std = joblib.load(STANDARD_MODEL_PATH)
+        if isinstance(model_data_std, dict):
+            model_std = model_data_std['model']
+            logger.info(f"✅ Loaded Standard model (from dict) from: {STANDARD_MODEL_PATH}")
+        else:
+            model_std = model_data_std
+            logger.info(f"✅ Loaded Standard model (raw) from: {STANDARD_MODEL_PATH}")
+    except Exception as e:
+        logger.error(f"❌ Failed to load Standard model: {e}")
+        sys.exit(1)
 
     # --- Process ARG interactions ---
     df_arg = df[df['Is_ARG']].copy()
@@ -476,6 +529,21 @@ if __name__ == "__main__":
 
     base_dir = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     logger.info(f"📁 Base directory: {base_dir}")
+
+    # Log current directory structure for debugging
+    logger.info(f"Current working directory: {Path.cwd()}")
+    logger.info(f"Parent directory: {Path.cwd().parent}")
+    
+    # Check if trained_models exists in common locations
+    parent_trained_models = Path.cwd().parent / "trained_models"
+    current_trained_models = Path.cwd() / "trained_models"
+    
+    if parent_trained_models.exists():
+        logger.info(f"Found trained_models at: {parent_trained_models}")
+    elif current_trained_models.exists():
+        logger.info(f"Found trained_models at: {current_trained_models}")
+    else:
+        logger.warning("⚠️  trained_models directory not found in common locations")
 
     # STEP 1
     subdirs = find_all_subdirectories(base_dir)
