@@ -38,7 +38,7 @@ python sample_vina.py
  this will generate exhaust50_dock.sdf which contains vina raw ranking of 50 sampled poses.
 ### 2. Compute RMSD of each sampled pose for later evaluation only
 ```bash
-python  new_creat_rmsd_csv.py
+python compute_rmsd_for_docked_pose.py
 ```
 this will compute RMSD of each sampled pose compared to reference experimental ligand pose and save results containing vina score into a csv. Reference ligand pose information only used to evluation of model performance, not used as model input.
 ### 3. Prediction dimer interaction energies.
