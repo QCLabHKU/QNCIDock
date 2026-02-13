@@ -31,41 +31,120 @@ logging.getLogger().setLevel(logging.ERROR)
 RDLogger.DisableLog('rdApp.warning')
 RDLogger.DisableLog('rdApp.info')
 
-# ==================== USED MODEL PATHS ====================
+# ==================== USED MODEL PATHS - UPDATED WITH ROBUST SEARCH ====================
+def find_project_root(start_path=None):
+    """
+    Find the project root directory containing 'pication-main' by searching upwards.
+    Returns the path to pication-main directory.
+    """
+    if start_path is None:
+        start_path = Path.cwd()
+    
+    current_path = Path(start_path).resolve()
+    
+    # Search upwards through parent directories
+    for parent in [current_path] + list(current_path.parents):
+        # Check if 'pication-main' directory exists in this parent
+        pication_main = parent / "pication-main"
+        if pication_main.exists() and pication_main.is_dir():
+            return pication_main
+    
+    # If not found, try alternative naming patterns
+    for parent in [current_path] + list(current_path.parents):
+        # Look for directories containing 'pication' and 'main'
+        for item in parent.iterdir():
+            if item.is_dir() and ('pication' in item.name.lower() and 'main' in item.name.lower()):
+                return item
+    
+    return None
+
 def get_model_paths():
-    """Dynamically locate model files based on current working directory"""
-    current_dir = Path.cwd()
+    """Dynamically locate model files by finding pication-main directory regardless of current depth"""
     
-    # Possible locations for trained_models directory
-    possible_locations = [
-        current_dir.parent / "trained_models",  # If running from Example_6HA4_T3Y subdirectory
-        current_dir / "trained_models",         # If running from main directory
-        Path(__file__).parent / "trained_models",  # Relative to script location
-    ]
+    # Find the project root (pication-main directory)
+    project_root = find_project_root()
     
-    # Find the first location that exists
-    for location in possible_locations:
-        if location.exists() and location.is_dir():
-            standard_model = location / "non-ARG_energy_prediction_model.pkl"
-            arg_model = location / "ARG_pi_interaction_energy_predictor.pkl"
-            
-            if standard_model.exists() and arg_model.exists():
-                logger.info(f"✅ Found trained_models directory at: {location}")
-                return standard_model, arg_model
+    if project_root is None:
+        # Fallback: try to construct path based on common patterns
+        current_dir = Path.cwd()
+        possible_roots = [
+            current_dir.parent.parent.parent,  # Go up 3 levels
+            current_dir.parent.parent,          # Go up 2 levels  
+            current_dir.parent,                 # Go up 1 level
+            current_dir,                        # Current level
+        ]
+        
+        for root in possible_roots:
+            potential_pication = root / "pication-main"
+            if potential_pication.exists():
+                project_root = potential_pication
+                break
     
-    # If not found, use default paths but warn user
-    logger.warning("⚠️  Could not automatically locate trained_models directory")
-    logger.warning(f"Current working directory: {current_dir}")
-    logger.warning("Please ensure model files exist at one of these locations:")
-    for location in possible_locations:
-        logger.warning(f"  - {location}")
+    if project_root is None:
+        logger.error("❌ Could not locate pication-main directory!")
+        logger.error(f"Current working directory: {Path.cwd()}")
+        logger.error("Please ensure you're running from within the pication project structure")
+        logger.error("Expected structure: .../pication-main/trained_models/")
+        # Return default paths but they will fail later
+        default_location = Path.cwd().parent / "trained_models"
+        return (
+            default_location / "non-ARG_energy_prediction_model.pkl",
+            default_location / "ARG_pi_interaction_energy_predictor.pkl"
+        )
     
-    # Return default paths (will fail gracefully later with proper error messages)
-    default_location = current_dir.parent / "trained_models"
-    return (
-        default_location / "non-ARG_energy_prediction_model.pkl",
-        default_location / "ARG_pi_interaction_energy_predictor.pkl"
-    )
+    # Construct path to trained_models directory
+    trained_models_dir = project_root / "trained_models"
+    
+    if not trained_models_dir.exists() or not trained_models_dir.is_dir():
+        logger.error(f"❌ trained_models directory not found at: {trained_models_dir}")
+        logger.error(f"Project root found at: {project_root}")
+        # Return paths that will fail gracefully
+        return (
+            trained_models_dir / "non-ARG_energy_prediction_model.pkl",
+            trained_models_dir / "ARG_pi_interaction_energy_predictor.pkl"
+        )
+    
+    logger.info(f"✅ Found project root: {project_root}")
+    logger.info(f"✅ Found trained_models directory: {trained_models_dir}")
+    
+    # Check for model files
+    standard_model = trained_models_dir / "non-ARG_energy_prediction_model.pkl"
+    arg_model = trained_models_dir / "ARG_pi_interaction_energy_predictor.pkl"
+    
+    if standard_model.exists() and arg_model.exists():
+        logger.info(f"✅ Found both model files:")
+        logger.info(f"   Standard model: {standard_model}")
+        logger.info(f"   ARG model: {arg_model}")
+        return standard_model, arg_model
+    else:
+        # List what's actually in the directory
+        available_files = list(trained_models_dir.glob("*.pkl"))
+        logger.warning(f"⚠️  Model files not found in {trained_models_dir}")
+        logger.info(f"Available .pkl files: {[f.name for f in available_files]}")
+        
+        # Try to find similar named files
+        standard_candidates = list(trained_models_dir.glob("*non-ARG*pkl"))
+        arg_candidates = list(trained_models_dir.glob("*ARG*pkl"))
+        
+        if standard_candidates and arg_candidates:
+            logger.info(f"Using candidate files:")
+            logger.info(f"   Standard: {standard_candidates[0]}")
+            logger.info(f"   ARG: {arg_candidates[0]}")
+            return standard_candidates[0], arg_candidates[0]
+        elif available_files:
+            # Use first two .pkl files if we can't find the specific ones
+            if len(available_files) >= 2:
+                logger.warning(f"Using first two .pkl files as fallback:")
+                logger.info(f"   Standard: {available_files[0]}")
+                logger.info(f"   ARG: {available_files[1]}")
+                return available_files[0], available_files[1]
+            elif len(available_files) == 1:
+                logger.warning(f"Only one .pkl file found, using it for both models:")
+                logger.info(f"   Using: {available_files[0]}")
+                return available_files[0], available_files[0]
+        
+        # Return the expected paths even if they don't exist (will fail gracefully later)
+        return standard_model, arg_model
 
 # Initialize model paths
 STANDARD_MODEL_PATH, ARG_MODEL_PATH = get_model_paths()
@@ -76,14 +155,33 @@ def diagnose_model_file(file_path):
     try:
         logger.info(f"🔍 Diagnosing model file: {file_path}")
         
+        # Check if file exists first
+        if not file_path.exists():
+            logger.error(f"   ❌ File does not exist: {file_path}")
+            return None
+            
         # Check file size
         file_size = file_path.stat().st_size
         logger.info(f"   File size: {file_size} bytes")
+        if file_size < 100:  # Suspiciously small
+            logger.warning(f"   ⚠️  File is very small ({file_size} bytes) - might be corrupted")
         
         # Try to read raw content (first few bytes)
         with open(file_path, 'rb') as f:
             raw_content = f.read(100)  # Read first 100 bytes
             logger.info(f"   Raw content (first 100 bytes): {raw_content[:50]}...")
+            
+            # Check if it's a simple text file with just a number
+            try:
+                text_content = raw_content.decode('utf-8').strip()
+                # Try to parse as number
+                float(text_content)
+                logger.error(f"   ❌ File appears to contain only a number: {text_content}")
+                logger.error(f"   This is NOT a valid model file - it's just a scalar value!")
+                return float(text_content)  # Return the scalar to indicate corruption
+            except (UnicodeDecodeError, ValueError):
+                # Not a simple number, continue with normal loading
+                pass
         
         # Try to load with joblib
         loaded_obj = joblib.load(file_path)
@@ -603,16 +701,22 @@ if __name__ == "__main__":
     logger.info(f"Current working directory: {Path.cwd()}")
     logger.info(f"Parent directory: {Path.cwd().parent}")
     
-    # Check if trained_models exists in common locations
-    parent_trained_models = Path.cwd().parent / "trained_models"
-    current_trained_models = Path.cwd() / "trained_models"
+    # The new get_model_paths() function will handle the search automatically
+    # But let's show what it found for transparency
+    logger.info(f"Model paths determined by robust search:")
+    logger.info(f"  Standard model: {STANDARD_MODEL_PATH}")
+    logger.info(f"  ARG model: {ARG_MODEL_PATH}")
     
-    if parent_trained_models.exists():
-        logger.info(f"Found trained_models at: {parent_trained_models}")
-    elif current_trained_models.exists():
-        logger.info(f"Found trained_models at: {current_trained_models}")
+    # Check if the resolved paths actually exist
+    if STANDARD_MODEL_PATH.exists():
+        logger.info(f"✅ Standard model file confirmed to exist")
     else:
-        logger.warning("⚠️  trained_models directory not found in common locations")
+        logger.warning(f"⚠️  Standard model file not found at resolved path")
+    
+    if ARG_MODEL_PATH.exists():
+        logger.info(f"✅ ARG model file confirmed to exist")
+    else:
+        logger.warning(f"⚠️  ARG model file not found at resolved path")
 
     # STEP 1
     subdirs = find_all_subdirectories(base_dir)
