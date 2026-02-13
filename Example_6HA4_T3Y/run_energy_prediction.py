@@ -21,6 +21,16 @@ import shutil
 import warnings
 from functools import partial
 
+# Configure logging FIRST before using it anywhere
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+# Filter warnings
+warnings.filterwarnings("ignore")
+logging.getLogger().setLevel(logging.ERROR)
+RDLogger.DisableLog('rdApp.warning')
+RDLogger.DisableLog('rdApp.info')
+
 # ==================== USED MODEL PATHS ====================
 def get_model_paths():
     """Dynamically locate model files based on current working directory"""
@@ -59,17 +69,45 @@ def get_model_paths():
 
 # Initialize model paths
 STANDARD_MODEL_PATH, ARG_MODEL_PATH = get_model_paths()
+
+# Additional diagnostic function to check model files
+def diagnose_model_file(file_path):
+    """Diagnose what's actually in the model file"""
+    try:
+        logger.info(f"🔍 Diagnosing model file: {file_path}")
+        
+        # Check file size
+        file_size = file_path.stat().st_size
+        logger.info(f"   File size: {file_size} bytes")
+        
+        # Try to read raw content (first few bytes)
+        with open(file_path, 'rb') as f:
+            raw_content = f.read(100)  # Read first 100 bytes
+            logger.info(f"   Raw content (first 100 bytes): {raw_content[:50]}...")
+        
+        # Try to load with joblib
+        loaded_obj = joblib.load(file_path)
+        logger.info(f"   Successfully loaded with joblib")
+        logger.info(f"   Type of loaded object: {type(loaded_obj)}")
+        
+        if isinstance(loaded_obj, dict):
+            logger.info(f"   Dictionary keys: {list(loaded_obj.keys())}")
+            for key, value in loaded_obj.items():
+                logger.info(f"     {key}: {type(value)}")
+                if hasattr(value, 'shape'):
+                    logger.info(f"       shape: {value.shape}")
+        elif hasattr(loaded_obj, 'predict'):
+            logger.info(f"   Object has predict method - looks like a model")
+        else:
+            logger.info(f"   Loaded object attributes: {dir(loaded_obj)[:10]}...")  # First 10 attrs
+            
+        return loaded_obj
+        
+    except Exception as e:
+        logger.error(f"   ❌ Error diagnosing {file_path}: {e}")
+        return None
+
 # =====================================================================
-
-# Filter warnings
-warnings.filterwarnings("ignore")
-logging.getLogger().setLevel(logging.ERROR)
-RDLogger.DisableLog('rdApp.warning')
-RDLogger.DisableLog('rdApp.info')
-
-import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 # Create error log file
 error_log_file = 'error_log.txt'
@@ -413,6 +451,20 @@ def run_model_prediction(temp_csv):
     logger.info(f"✅ Using Standard model: {STANDARD_MODEL_PATH}")
     logger.info(f"✅ Using ARG model: {ARG_MODEL_PATH}")
 
+    # Diagnose both model files first
+    logger.info("🔍 Diagnosing model files...")
+    standard_model_obj = diagnose_model_file(STANDARD_MODEL_PATH)
+    arg_model_obj = diagnose_model_file(ARG_MODEL_PATH)
+
+    # Check if diagnosis revealed issues
+    if standard_model_obj is not None and isinstance(standard_model_obj, (int, float)):
+        logger.error(f"❌ Standard model appears to be corrupted - loaded as scalar value: {standard_model_obj}")
+        logger.error("This suggests the .pkl file contains just a number instead of a model object")
+    
+    if arg_model_obj is not None and isinstance(arg_model_obj, (int, float)):
+        logger.error(f"❌ ARG model appears to be corrupted - loaded as scalar value: {arg_model_obj}")
+        logger.error("This suggests the .pkl file contains just a number instead of a model object")
+
     all_preds = []
 
     # --- Load ARG model ---
@@ -421,12 +473,17 @@ def run_model_prediction(temp_csv):
         if isinstance(model_data_arg, dict):
             model_arg = model_data_arg['model']
             logger.info(f"✅ Loaded ARG model (from dict) from: {ARG_MODEL_PATH}")
+        elif hasattr(model_data_arg, 'predict'):
+            model_arg = model_data_arg
+            logger.info(f"✅ Loaded ARG model (direct) from: {ARG_MODEL_PATH}")
         else:
-            model_arg = model_data_arg  # fallback if saved as raw model
-            logger.info(f"✅ Loaded ARG model (raw) from: {ARG_MODEL_PATH}")
+            logger.error(f"❌ ARG model has unexpected type: {type(model_data_arg)}")
+            if isinstance(model_data_arg, (int, float)):
+                logger.error("   Model file appears to contain just a number - this is not a valid model file")
+            return None
     except Exception as e:
         logger.error(f"❌ Failed to load ARG model: {e}")
-        sys.exit(1)
+        return None
 
     # --- Load Standard model ---
     try:
@@ -434,12 +491,18 @@ def run_model_prediction(temp_csv):
         if isinstance(model_data_std, dict):
             model_std = model_data_std['model']
             logger.info(f"✅ Loaded Standard model (from dict) from: {STANDARD_MODEL_PATH}")
-        else:
+        elif hasattr(model_data_std, 'predict'):
             model_std = model_data_std
-            logger.info(f"✅ Loaded Standard model (raw) from: {STANDARD_MODEL_PATH}")
+            logger.info(f"✅ Loaded Standard model (direct) from: {STANDARD_MODEL_PATH}")
+        else:
+            logger.error(f"❌ Standard model has unexpected type: {type(model_data_std)}")
+            if isinstance(model_data_std, (int, float)):
+                logger.error("   Model file appears to contain just a number - this is not a valid model file")
+                logger.error("   Please check if the model file was saved correctly")
+            return None
     except Exception as e:
         logger.error(f"❌ Failed to load Standard model: {e}")
-        sys.exit(1)
+        return None
 
     # --- Process ARG interactions ---
     df_arg = df[df['Is_ARG']].copy()
@@ -447,10 +510,13 @@ def run_model_prediction(temp_csv):
         X = engineer_arg_features(df_arg)
         valid = X.notnull().all(axis=1)
         if valid.any():
-            pred = model_arg.predict(X[valid])
-            df_arg.loc[valid, 'Predicted_Energy'] = pred
-            all_preds.append(df_arg[valid])
-        logger.info(f"✅ ARG: {valid.sum()} predictions")
+            try:
+                pred = model_arg.predict(X[valid])
+                df_arg.loc[valid, 'Predicted_Energy'] = pred
+                all_preds.append(df_arg[valid])
+                logger.info(f"✅ ARG: {valid.sum()} predictions")
+            except Exception as e:
+                logger.error(f"❌ Error predicting ARG interactions: {e}")
 
     # --- Process Non-ARG interactions ---
     df_other = df[~df['Is_ARG']].copy()
@@ -460,11 +526,14 @@ def run_model_prediction(temp_csv):
         X.columns = ['delta_z', 'delta_x', 'dihedral_angle', 'distance']
         valid = X.notnull().all(axis=1)
         if valid.any():
-            X_valid = X[valid][['delta_z', 'delta_x', 'dihedral_angle', 'distance']]
-            pred = model_std.predict(X_valid)
-            df_other.loc[valid, 'Predicted_Energy'] = pred
-            all_preds.append(df_other[valid])
-        logger.info(f"✅ Non-ARG: {valid.sum()} predictions")
+            try:
+                X_valid = X[valid][['delta_z', 'delta_x', 'dihedral_angle', 'distance']]
+                pred = model_std.predict(X_valid)
+                df_other.loc[valid, 'Predicted_Energy'] = pred
+                all_preds.append(df_other[valid])
+                logger.info(f"✅ Non-ARG: {valid.sum()} predictions")
+            except Exception as e:
+                logger.error(f"❌ Error predicting Non-ARG interactions: {e}")
 
     if not all_preds:
         logger.error("❌ No valid predictions!")
