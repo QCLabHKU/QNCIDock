@@ -56,33 +56,34 @@ python  print_model_final.py
 This print the vina and model top-4 poses RMSD related to cyrstal ligand poses.
 
 ## Run with preprocess dataset (Reproduce paper key results, will take some time for Vina sampling run.) 
-This section will demonstrate how to run our docking pipeline and evaluate performance for a dataset. 
+This section will demonstrate how to run our docking pipeline and evaluate performance for a dataset. The zip files contains the dataset and all scripts needed to reproduce key paper results.
 ```bash
 unzip posebusters_all_cationic_binding_pockets_complexes.zip
 cd PB_cationic_binding_pocket/
 ```
-```bash
-python protonate_all_proteins.py
-```
+
 
 '''reference_experimental_pication_interactions_report_with_pka_filtered.csv''' This contains the experimental pi-cation interactions and is used just for evaluating the pi-cation interaction recocery rate of the dataset, can be produced by PLIP see below sections.
-
-This protonate all protein files. (skip this step if your proteins already protonated)
-
 ```bash
 python protonate_all_proteins.py
 ```
+This protonate all protein files. (skip this step if your proteins already protonated)
 
 As in the sinlge protein docking example, similar to the single protein complex docking, run the sampling first(will take some time depends on CPU)
 
 ```bash
 tmux
-python sample_vina.py 
+python sample_vina.py
+python run_energy_prediction.py
 ```
 Then run the remaining 3 python scripts as in the single-protein docking demonstration. 
 
-
-Then run the evaluate_RMSD.py and evlaute_pi_cation_interaction_recovery rate.py
+For evluation pefromance: 
+```bash
+python  evaluation_recovery_rate.py
+python compute_rmsd_for_docked_pose.py
+python  evaluation_rmsd.py
+```
 
 
 
@@ -97,8 +98,7 @@ cd to "with_pication" dir
 Run the following scripts in that directory:
 
 python pi-cation-analysis.py, which finds all pi-cation interactions and list the distance,offset,Rz of these interactions.
-python 1_sampling.py
-python 2_model.py
+
 
 
 ## Dock ligand aromatic rings only 
@@ -108,9 +108,14 @@ In this section , we demonstrate how to dock aromatic rings of ligands for Dockg
 python prepare_docking_tasks.py
 python sample_aromatic_ring_poses.py
 python model_predict_energies.py
+python  run_model_rerank.py
 ```
 
 For evaluation :
+```bash
+python evaluation_recovery_rate.py
+python evaluation_rmsd.py
+```
 
 
 
