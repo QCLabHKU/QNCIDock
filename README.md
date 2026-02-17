@@ -89,16 +89,14 @@ python  evaluation_rmsd.py
 
 
 
-## Protanate protein and prepare for out pipele
-To run the full pipeline on a unprocessed dataset like PoseBuster raw dataset:
+# To extract protein with cationic binding pockets from a raw dataset: 
 
-Download the dataset of interest.cd to the directory containing all PDB ID dirs.RUN move.py to move the dir containing PI-CATION interaction to "with_pication" dir. 
-cd to "with_pication" dir
+Download the dataset of interest. CD into that dir. 
 
 
 Run the following scripts in that directory:
 
-python pi-cation-analysis.py, which finds all pi-cation interactions and list the distance,offset,Rz of these interactions.
+python pi-cation-analysis.py, which finds all pi-cation interactions and list the distance,offset,Rz of these interactions. 
 
 
 
