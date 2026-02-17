@@ -73,7 +73,16 @@ This protonate all protein files. (skip this step if your proteins already proto
 python protonate_all_proteins.py
 ```
 
-As in the sinlge protein docking example, similar to the single protein complex docking, run the 4 python script in order. Then run the evaluate_RMSD.py and evlaute_pi_cation_interaction_recovery rate.py
+As in the sinlge protein docking example, similar to the single protein complex docking, run the sampling first(will take some time depends on CPU)
+
+```bash
+tmux
+python sample_vina.py 
+```
+Then run the remaining 3 python scripts as in the single-protein docking demonstration. 
+
+
+Then run the evaluate_RMSD.py and evlaute_pi_cation_interaction_recovery rate.py
 
 
 
