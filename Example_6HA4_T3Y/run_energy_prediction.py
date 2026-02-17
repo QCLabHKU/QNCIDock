@@ -670,29 +670,9 @@ def cleanup_generated_files_recursive(base_dir):
             except: pass
     if count: logger.info(f"🧹 Cleaned {count} temp files")
 
-def print_logo():
-    print(r"""
-    ╔══════════════════════════════════════════════════════════════╗
-    ║                    RRRRRRR  IIIIIIII  NNN    NN  GGGGGGG     ║
-    ║                    RR   RR     II     NNNN   NN  GG          ║
-    ║                    RRRRRR      II     NN NN  NN  GG  GGG     ║
-    ║                    RR  RR      II     NN  NN NN  GG    GG    ║
-    ║                    RR   RR  IIIIIIII  NN   NNNN   GGGGGGG    ║
-    ║                                                              ║
-    ║     DDDDDDD  OOOOOOO   CCC    K   K                          ║
-    ║     DD   DD OO   OO  CC       K  K                           ║
-    ║     DD   DD OO   OO CC        KKK                            ║
-    ║     DD   DD OO   OO CC        K  K                           ║
-    ║     DDDDDDD  OOOOOOO   CCC    K   K                          ║
-    ║                                                              ║
-    ║  Tools to dock ligand aromatic rings fast and accurately     ║
-    ║                   Version 1.0.0                              ║
-    ╚══════════════════════════════════════════════════════════════╝
-    """)
 
 # ==================== MAIN ====================
 if __name__ == "__main__":
-    print_logo()
 
     base_dir = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
     logger.info(f"📁 Base directory: {base_dir}")
