@@ -56,10 +56,11 @@ python  print_model_final.py
 This print the vina and model top-4 poses RMSD related to cyrstal ligand poses.
 
 ## Run with preprocess dataset (Reproduce paper key results, will take some time for Vina sampling run.) 
-For demonstration, we provide preprocessed data (protein protanated, ligand in sdf format) for the Dockgen Dataset with all-pication interactions complexes included. This section will demonstrate how to run our docking pipeline and evaluat performance.  First, unzip the .zip file. 
+This section will demonstrate how to run our docking pipeline and evaluate performance for a dataset. 
 ```bash
-unzip Dockgen_all_with_pication_protein_protanated.zip
+unzip posebusters_all_cationic_binding_pockets_complexes.zip 
 ```
+
 As in the sinlge protein docking example, run the 4 python script in order. Then run the evaluate_RMSD.py and evlaute_pi_cation_interaction_recovery rate.py
 
 
