@@ -109,13 +109,13 @@ In this section , we demonstrate how to dock aromatic rings of ligands for Dockg
 python prepare_docking_tasks.py
 python sample_aromatic_ring_poses.py
 python model_predict_energies.py
-python  run_model_rerank.py
 ```
 
 For evaluation :
 ```bash
-python evaluation_recovery_rate.py
-python evaluation_rmsd.py
+python tight_cutoff_evaluation.py
+python loose_cutoff_evaluation.py
+python errors_relative_to_experimental_inteactions.py
 ```
 
 
