@@ -106,8 +106,10 @@ In this section , we demonstrate how to dock aromatic rings of ligands for Dockg
 unzip dockgen_all_cationic_binding_pockets_protein_protonated_with_codes
 cd Dockgen_all_with_pication_protein_protonated
 ```
+Before running prepare_docking_tasks.py  , change the ring sdf dir to matches your correct path.
+
 ```bash
-python prepare_docking_tasks.py
+python prepare_docking_tasks.py    
 python sample_aromatic_ring_poses.py
 python model_predict_energies.py
 ```
