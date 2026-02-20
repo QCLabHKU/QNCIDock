@@ -103,7 +103,7 @@ python pi-cation-analysis.py, which finds all pi-cation interactions and list th
 In this section , we demonstrate how to dock aromatic rings of ligands for Dockgen dataset, and evaluation of ring docking False Postive Reduction rate and Pi-cation interaction recovery rate of docked ring poses, and errors_relative_to_experimental_inteactions.py. (reproduce paper results)
 
 ```bash
-unzip dockgen_all_cationic_binding_pockets_protein_protonated_with_codes
+unzip Dockgen_all_with_pication_protein_protonated.zip
 cd Dockgen_all_with_pication_protein_protonated
 ```
 Before running prepare_docking_tasks.py  , change the ring sdf dir to matches your correct path.
