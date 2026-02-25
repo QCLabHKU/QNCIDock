@@ -1,6 +1,6 @@
 ## Overview
-A method trained on DLPNO-CCSD(T) dimer interaction energies for quantitively evaluate pication interaction strength and guide docking aromatic ligand into  cationic protein binding pocket. 
-To use our method to perfrom docking, you need to prepare protanated protein in pbd format and ligand intial position in sdf format. 
+A method trained on DLPNO-CCSD(T) dimer interaction energies for quantitatively evaluate pication interaction strength and guide docking aromatic ligand into  cationic protein binding pocket. 
+To use our docking method, you need to prepare the protonated protein in PDB format and the ligand's initial position in SDF format. 
 
 ## Framework overview
 ![Workflow Illustration](workflow_illustration.png)
@@ -21,8 +21,8 @@ PicationDock requires a specific folder structure for proper execution. The data
 should be placed under ***/pication/.../...
 
 - **Folder Name:** A four-character identifier,  typically matching the PDB ID and ligand ID, e.g 6HA4_T3Y
-- The following files are required in each folder named (e.g 6HA4_T3Y)
-  - `<folder_name>_ligand.sdf`      --ligand file in sdf format, used for auto-generate a docking box (default +8 on all six sides)
+- The following files are required in each folder named (e.g., 6HA4_T3Y)
+  - `<folder_name>_ligand.sdf`      --ligand file in sdf format, used for auto-generating a docking box (default +8 on all six sides)
   - `<folder_name>_protein_protonated.pdb ` --protonated protein file in pbd format 
 
 
@@ -30,18 +30,18 @@ Ensure that all required files are present before running.
 
 
 ## Docking on a single protein 
-We first demonstrate how to dock 6HA4_T3Y from Dockgen Datset for you to try. first change into the directory '*replace with your path*'/pication/Example_6HA4_T3Y
+We first demonstrate how to dock 6HA4_T3Y from Dockgen Dataset for you to try. first change into the directory '*replace with your path*'/pication/Example_6HA4_T3Y
 ### 1. Sample
 ```bash
 python sample_vina.py
 ```
- this will generate exhaust50_dock.sdf which contains vina raw ranking of 50 sampled poses.
-### 2. Compute RMSD of each sampled pose for later evaluation only
+ This will generate exhaust50_dock.sdf, which contains the Vina raw ranking of 50 sampled poses.
+### 2. Compute the RMSD of each sampled pose for later evaluation only
 ```bash
 python compute_rmsd_for_docked_pose.py
 ```
-this will compute RMSD of each sampled pose compared to reference experimental ligand pose and save results containing vina score into a csv. Reference ligand pose information only used to evluation of model performance, not used as model input.
-### 3. Prediction dimer interaction energies.
+This will compute the RMSD of each sampled pose relative to the reference experimental ligand pose and save the results, including the Vina score, in a csv file. Reference ligand pose information is only used for the evaluation of model performance, not used as model input.
+### 3. Prediction of dimer interaction energies.
 ```bash
 python run_energy_prediction.py
 ```
@@ -53,10 +53,10 @@ python  run_model_rerank.py
 ```bash
 python  print_model_final.py
 ```
-This print the vina and model top-4 poses RMSD related to cyrstal ligand poses.
+This prints the vina and model top-4 poses 'RMSD relative to the crystal ligand poses.
 
 ## Run with a dataset (Reproduce paper key results, will take some time for Vina sampling run.) 
-This section will demonstrate how to run our docking pipeline and evaluate performance for a dataset. The zip files contains the dataset and all scripts needed to reproduce key paper results.
+This section demonstrates how to run our docking pipeline and evaluate its performance on a dataset. The zip files contain the dataset and all scripts needed to reproduce key paper results.
 ```bash
 unzip Posebusters_reproduce_paper_with_codes.zip
 cd PB_cationic_binding_pocket/
@@ -67,19 +67,19 @@ cd PB_cationic_binding_pocket/
 ```bash
 python protonate_all_proteins.py
 ```
-This protonate all protein files. (skip this step if your proteins already protonated)
+This protonates all protein files. (skip this step if your proteins are already protonated)
 
-As in the sinlge protein docking example, similar to the single protein complex docking, run the sampling first(will take some time depends on CPU)
+As in the single protein docking example, similar to the single protein complex docking, run the sampling first(will take some time, depending on the CPU)
 
 ```bash
 nohup python sample_vina.py &
 python compute_rmsd_for_docked_pose.py 
-python run_energy_prediction.py #This steps will generate many plipfixed_*.pdb and *_protonated.pdb files, you can delete them after codes finish.
+python run_energy_prediction.py
 python  run_model_rerank.py
 ```
-Then run the remaining 3 python scripts as in the single-protein docking demonstration. 
+Then run the remaining 3 Python scripts as in the single-protein docking demonstration.  # run_energy_prediction.py will generate many plipfixed_*.pdb and *_protonated.pdb files, you can delete them after codes finish.
 
-For evluation pefromance: 
+For evaluation performance: 
 ```bash
 python  evaluation_recovery_rate.py
 python  evaluation_rmsd.py
@@ -95,25 +95,25 @@ Download the dataset of interest. CD into that dir.
 
 Run the following scripts in that directory:
 
-python pi-cation-analysis.py, which finds all pi-cation interactions and list the distance,offset,Rz of these interactions. 
+python pi-cation-analysis.py, which finds all pi-cation interactions and lists the distance, offset, and Rz of these interactions. 
 
 
 
 ## Dock ligand aromatic rings only 
-In this section , we demonstrate how to dock aromatic rings of ligands for Dockgen dataset, and evaluation of ring docking False Postive Reduction rate and Pi-cation interaction recovery rate of docked ring poses, and errors_relative_to_experimental_inteactions.py. (reproduce paper results)
+In this section , we demonstrate how to dock aromatic rings of ligands for the Dockgen dataset, and evaluation of ring docking False Positive Reduction rate and Pi-cation interaction recovery rate of docked ring poses, and errors_relative_to_experimental_inteactions.py. (reproduce paper results)
 
 ```bash
 unzip Dockgen_all_with_pication_protein_protonated.zip
 cd Dockgen_all_with_pication_protein_protonated
 ```
-Before running prepare_docking_tasks.py  , change the ring sdf dir to matches your correct path.
+Before running prepare_docking_tasks.py, change the ring sdf dir to match your correct path.
 
 ```bash
 python prepare_docking_tasks.py    
 python sample_aromatic_ring_poses.py 
-python model_predict_energies.py#This steps will generate many plipfixed_*.pdb and *_protonated.pdb files, you can delete them after codes finish.
+python model_predict_energies.py
 ```
-
+Model_predict_energies.py will generate many plipfixed_*.pdb and *_protonated.pdb files; you can delete them after the code finishes.
 For evaluation :
 ```bash
 python tight_cutoff_evaluation.py
