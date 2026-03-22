@@ -40,8 +40,7 @@ python sample_vina.py
 ```bash
 python compute_rmsd_for_docked_pose.py
 ```
-This will compute the RMSD of each sampled pose relative to the reference experimental ligand pose and save the results, including the Vina score, in a csv file. Reference ligand pose information is only used for the evaluation of model performance, not used as model input.
-### 3. Prediction of dimer interaction energies.
+This will compute the RMSD of each sampled pose relative to the reference experimental ligand pose and save the results, including the Vina score, in a csv file. Reference ligand pose information is only used for the evaluation of model performance.
 ```bash
 python run_energy_prediction.py
 ```
