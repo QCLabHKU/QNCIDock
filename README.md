@@ -56,7 +56,7 @@ python  print_model_final.py
 ```
 This prints the vina and model top-4 poses 'RMSD relative to the crystal ligand poses.
 
-## Run with a dataset (Reproduce paper key results, will take some time for Vina sampling run.) 
+## Run with a dataset 
 This section demonstrates how to run our docking pipeline and evaluate its performance on a dataset. The zip files contain the dataset and all scripts needed to reproduce key paper results.
 ```bash
 unzip Posebusters_reproduce_paper_with_codes.zip
