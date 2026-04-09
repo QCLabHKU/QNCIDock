@@ -130,7 +130,7 @@ python errors_relative_to_experimental_inteactions.py
 
 
 ## Citation 
-Please cite our  arxiv preprint if you find it helpful. Thank you!
+Please cite our  arXiv preprint (will update shortly) if you find it helpful. Thank you!
 
 ## OS
 The code has been tested on CentOS Linux Version 8.
