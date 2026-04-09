@@ -128,8 +128,6 @@ python errors_relative_to_experimental_inteactions.py
 ```
 
 
-
-## Citation 
 ## Citation
 
 If you use this work, please cite:
