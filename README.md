@@ -142,7 +142,7 @@ DOI: [10.26434/chemrxiv.15001781/v1](https://chemrxiv.org/doi/abs/10.26434/chemr
 
 ### BibTeX
 ```bibtex
-@article{doi:10.26434/chemrxiv.15001781/v1,
+@article{YIN2026QNCIDock,
   author  = {Zhuo Yin and Jun Yang},
   title   = {Quantum chemical energy-based cation-π interaction recovers protein-ligand docking poses in cationic pocket},
   journal = {ChemRxiv},
