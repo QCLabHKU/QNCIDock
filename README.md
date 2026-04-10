@@ -55,7 +55,7 @@ python run_energy_prediction.py
 ```bash
 python  run_model_rerank.py
 ```
-### 5. Visualize docking results 
+### 5. Check docking results 
 ```bash
 python  print_model_final.py
 ```
