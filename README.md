@@ -1,9 +1,10 @@
+
 ## Overview
 A method trained on DLPNO-CCSD(T) dimer interaction energies for quantitatively evaluating non—covalent interaction strength and guiding docking ligand into  cationic protein binding pocket. 
 To use our docking method, you need to prepare the protonated protein in PDB format and the ligand's initial position in SDF format. 
 
 ## Framework overview
-
+<img width="4831" height="1851" alt="fig1b" src="https://github.com/user-attachments/assets/68892a77-d590-45f4-a54b-b7445e069791" />
 ![Overview](workflow.png)
 
 
