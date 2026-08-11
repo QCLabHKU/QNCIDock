@@ -25,7 +25,7 @@ conda activate QNCIDock
 
 ## Data Organization
 PicationDock requires a specific folder structure for proper execution. The dataset should be structured as follows:
-should be placed under ***/pication/.../...
+should be placed under ***/QNCIDock/.../...
 
 - **Folder Name:** A four-character identifier,  typically matching the PDB ID and ligand ID, e.g., 6HA4_T3Y
 - The following files are required in each folder named (e.g., 6HA4_T3Y)
