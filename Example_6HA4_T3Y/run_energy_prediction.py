@@ -34,8 +34,8 @@ RDLogger.DisableLog('rdApp.info')
 # ==================== USED MODEL PATHS - UPDATED WITH ROBUST SEARCH ====================
 def find_project_root(start_path=None):
     """
-    Find the project root directory containing 'pication-main' by searching upwards.
-    Returns the path to pication-main directory.
+    Find the project root directory containing 'QNCIDock' by searching upwards.
+    Returns the path to QNCIDock directory.
     """
     if start_path is None:
         start_path = Path.cwd()
@@ -44,24 +44,24 @@ def find_project_root(start_path=None):
     
     # Search upwards through parent directories
     for parent in [current_path] + list(current_path.parents):
-        # Check if 'pication-main' directory exists in this parent
-        pication_main = parent / "pication-main"
-        if pication_main.exists() and pication_main.is_dir():
-            return pication_main
+        # Check if 'QNCIDock' directory exists in this parent
+        qnci_dock = parent / "QNCIDock"
+        if qnci_dock.exists() and qnci_dock.is_dir():
+            return qnci_dock
     
     # If not found, try alternative naming patterns
     for parent in [current_path] + list(current_path.parents):
-        # Look for directories containing 'pication' and 'main'
+        # Look for directories containing 'QNCI' or 'dock'
         for item in parent.iterdir():
-            if item.is_dir() and ('pication' in item.name.lower() and 'main' in item.name.lower()):
+            if item.is_dir() and ('QNCI' in item.name or 'dock' in item.name.lower()):
                 return item
     
     return None
 
 def get_model_paths():
-    """Dynamically locate model files by finding pication-main directory regardless of current depth"""
+    """Dynamically locate model files by finding QNCIDock directory regardless of current depth"""
     
-    # Find the project root (pication-main directory)
+    # Find the project root (QNCIDock directory)
     project_root = find_project_root()
     
     if project_root is None:
@@ -75,16 +75,16 @@ def get_model_paths():
         ]
         
         for root in possible_roots:
-            potential_pication = root / "pication-main"
-            if potential_pication.exists():
-                project_root = potential_pication
+            potential_qnci = root / "QNCIDock"
+            if potential_qnci.exists():
+                project_root = potential_qnci
                 break
     
     if project_root is None:
-        logger.error("❌ Could not locate pication-main directory!")
+        logger.error(f"❌ Could not locate QNCIDock directory!")
         logger.error(f"Current working directory: {Path.cwd()}")
-        logger.error("Please ensure you're running from within the pication project structure")
-        logger.error("Expected structure: .../pication-main/trained_models/")
+        logger.error("Please ensure you're running from within the QNCIDock project structure")
+        logger.error("Expected structure: .../QNCIDock/trained_models/")
         # Return default paths but they will fail later
         default_location = Path.cwd().parent / "trained_models"
         return (
