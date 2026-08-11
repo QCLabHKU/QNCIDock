@@ -79,7 +79,7 @@ python pi-cation-analysis.py, which finds all pi-cation interactions and lists t
 ```
 
 
-## Citation
+### Citation
 
 If you find this work helful, please cite:
 
