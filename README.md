@@ -70,16 +70,17 @@ Download the dataset of interest. CD into that dir.
 
 
 Run the following scripts in that directory:
-
-python pi-cation-analysis.py, which finds all pi-cation interactions and lists the distance, offset, and Rz of these interactions. 
+```bash
+python pi-cation-analysis.py
+```
+ which finds all pi-cation interactions and lists the distance, offset, and Rz of these interactions. 
 
 
 
 
 ```
+## Section : Citation
 
-
-### Citation
 
 If you find this work helful, please cite:
 
