@@ -13,7 +13,7 @@ To use our docking method, you need to prepare the protonated protein in PDB for
 ## Environments
 First, clone our repo. 
 ```bash
-gh repo clone zhuoy-qc/QNCIDock
+git clone https://github.com/zhuoy-qc/QNCIDock.git
 ```
 Then, we recommend using Conda to set up the environment.
 ```bash
