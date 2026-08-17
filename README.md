@@ -1,6 +1,6 @@
 
 ## Overview
-An SOTA method (evaluated on PoseBusters, DeepDockingDare, DockGen cationic binding pocket subsets) trained on DLPNO-CCSD(T) dimer interaction energies for quantitatively evaluating non—covalent interaction strength and guiding docking ligand into  cationic protein binding pocket. 
+An SOTA method (evaluated on PoseBusters, DeepDockingDare, DockGen cationic binding pocket subsets) trained on DLPNO-CCSD(T) dimer interaction energies for quantitatively evaluating non—covalent interaction strength and guiding docking ligands into  cationic protein binding pockets. 
 To use our docking method, you need to prepare the protonated protein in PDB format and the ligand's initial position in SDF format. 
 
 ## Framework overview
@@ -29,7 +29,7 @@ should be placed under ***/QNCIDock/.../...
 
 - **Folder Name:** A four-character identifier,  typically matching the PDB ID and ligand ID, e.g., 6HA4_T3Y
 - The following files are required in each folder named (e.g., 6HA4_T3Y)
-  - `<folder_name>_ligand.sdf`      --ligand file in sdf format, used for auto-generating a docking box (default +8 on all six sides)
+  - `<folder_name>_ligand.sdf`      --ligand file in SDF format, used for auto-generating a docking box (default +8 on all six sides)
   - `<folder_name>_protein_protonated.pdb ` --protonated protein file in pbd format 
 
 
@@ -59,7 +59,7 @@ python  run_model_rerank.py
 ```bash
 python  print_model_final.py
 ```
-This prints the vina and model top-4 poses 'RMSD relative to the crystal ligand poses.
+This prints the Vina and model top-4 poses, 'RMSD relative to the crystal ligand poses.
 
 
 
@@ -73,7 +73,7 @@ Run the following scripts in that directory:
 ```bash
 python pi-cation-analysis.py
 ```
- which finds all pi-cation interactions and lists the distance, offset, and Rz of these interactions. 
+It finds all pi-cation interactions and lists the distance, offset, and Rz of these interactions. 
 
 
 
@@ -81,7 +81,7 @@ python pi-cation-analysis.py
 ### Citation
 
 
-If you find this work helful, please cite:
+If you find this work helpful, please cite:
 
 **Quantum chemical energy-based cation-π interaction recovers protein-ligand docking poses in cationic pocket**  
 Zhuo Yin, Jun Yang  
