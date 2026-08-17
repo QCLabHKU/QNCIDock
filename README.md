@@ -4,8 +4,8 @@ An SOTA method (evaluated on PoseBusters, DeepDockingDare, DockGen cationic bind
 To use our docking method, you need to prepare the protonated protein in PDB format and the ligand's initial position in SDF format. 
 
 ## Framework overview
-
 ![Overview](workflow.png)
+
 
 
 
