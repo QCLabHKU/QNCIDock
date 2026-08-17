@@ -90,7 +90,7 @@ If you find this work helpful, please cite:
 Zhuo Yin, Jun Yang  
 *ChemRxiv*, 2026.  
 [DOI: [10.26434/chemrxiv.15001781/v2](https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781/v2)  
-[PDF Download](https://chemrxiv.org/doi/pdf/10.26434/chemrxiv.15001781/v2)]
+
 
 ### BibTeX
 ```bibtex
