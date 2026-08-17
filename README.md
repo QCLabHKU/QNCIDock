@@ -95,11 +95,9 @@ Zhuo Yin, Jun Yang
   author  = {Zhuo Yin and Jun Yang},
   title   = {Quantum chemical energy-based cation-π interaction recovers protein-ligand docking poses in cationic pocket},
   journal = {ChemRxiv},
-  volume  = {2026},
-  number  = {0409},
   year    = {2026},
-  doi     = {10.26434/chemrxiv.15001781/v1},
-  url     = {https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781/v1},
+  doi     = {10.26434/chemrxiv.15001781/v2},
+  url     = {https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781/v2},
 }
 ```
 
