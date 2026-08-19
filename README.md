@@ -89,7 +89,7 @@ If you find this work helpful, please cite:
 **Quantum chemical energy-based cation-π interaction recovers protein-ligand docking poses in cationic pocket**  
 Zhuo Yin, Jun Yang  
 *ChemRxiv*, 2026.  
-URL:https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781/v2
+URL:https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781
 
 
 ### BibTeX
@@ -99,8 +99,8 @@ URL:https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781/v2
   title   = {Quantum chemical energy-based cation-π interaction recovers protein-ligand docking poses in cationic pocket},
   journal = {ChemRxiv},
   year    = {2026},
-  doi     = {10.26434/chemrxiv.15001781/v2},
-  url     = {https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781/v2},
+  doi     = {10.26434/chemrxiv.15001781},
+  url     = {https://chemrxiv.org/doi/abs/10.26434/chemrxiv.15001781},
 }
 ```
 
